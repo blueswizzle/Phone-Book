@@ -4,13 +4,12 @@ import resources.ResourceLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserInterface {
-    Scanner scanner;
-    ArrayList<Long> phoneNumbers;
+    private Scanner scanner;
+    private ArrayList<Long> phoneNumbers;
 
     public UserInterface() {
         this.scanner = new Scanner(System.in);
@@ -24,7 +23,7 @@ public class UserInterface {
     }
     public void readPhoneBookFile() throws FileNotFoundException {
         String folder = ResourceLoader.getResourceFolder();
-        File file = new File(folder +"\\phonenumbers" );
+        File file = new File(folder +"//phonenumbers");
         Scanner sc = new Scanner(file);
         while(sc.hasNextLine()){
             String parts [] = sc.nextLine().split(" ");
