@@ -14,7 +14,12 @@ public class Person {
     public String getFirstName() {
         return firstName;
     }
-
+    public String getLastName(){
+        return lastName;
+    }
+    public long getPhoneNumber(){
+        return phoneNumber;
+    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

@@ -11,7 +11,6 @@ public class Main {
             UserInterface ui = new UserInterface();
             PhoneDirectory pd = new PhoneDirectory();
             pd.readPhoneBookFile();
-            pd.printPeople();
 
 
     }
