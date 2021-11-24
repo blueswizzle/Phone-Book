@@ -8,12 +8,16 @@ import java.util.*;
 
 public class PhoneDirectory {
     private ArrayList<Person> peopleList;
-    private HashMap<String,Long> peopleHashMap;
+    private Map<String, Set<Person>> firstNameMap;
+    private Map<String, Set<Person>> lastNameMap;
+    private Map<String, Set<Person>> phoneNumberMap;
     private ResourceLoader rl;
 
     public PhoneDirectory(){
         peopleList = new ArrayList<>();
-        peopleHashMap = new HashMap<>();
+        firstNameMap = new HashMap<>();
+        lastNameMap = new HashMap<>();
+        phoneNumberMap = new HashMap<>();
         rl = new ResourceLoader();
     }
     public void readPhoneBookFile() throws FileNotFoundException {
@@ -22,23 +26,43 @@ public class PhoneDirectory {
         Scanner sc = new Scanner(file);
         while(sc.hasNextLine()){
             String parts [] = sc.nextLine().split(" ");
-            String name;
             String firstName = parts[1];
             String lastName;
-            Long number = Long.valueOf(parts[0]);
-            if(parts.length !=3){
-                name = parts[1] + " N/A";
-            }else{
-                name = parts[1] + " " + parts[2];
-            }
-            peopleHashMap.put(name,number);
+            String number = parts[0];
             if(parts.length < 3){
                 lastName = "N/A";
             }else{
                 lastName = parts[2];
             }
-            peopleList.add(new Person(firstName,lastName,number));
+            addPerson(new Person(firstName,lastName,number));
         }
+    }
+    public void addPerson(Person person){
+        Set<Person> set
+                = firstNameMap.computeIfAbsent(person.getFirstName().toUpperCase(), k -> new HashSet<>());
+        set.add(person);
+        set = lastNameMap.computeIfAbsent(person.getLastName().toUpperCase(), k -> new HashSet<>());
+        set.add(person);
+        set = phoneNumberMap.computeIfAbsent(person.getPhoneNumber(), k -> new HashSet<>());
+        set.add(person);
+    }
+    public Set<Person> getByFirstName(String firstname){
+        return firstNameMap.get(firstname.toUpperCase());
+    }
+    public Set<Person> getByLastName(String lastname){
+        return lastNameMap.get(lastname.toUpperCase());
+    }
+    public Set<Person> getByPhoneNumber(String number){
+        return phoneNumberMap.get(number);
+    }
+
+    public void printAllPeopleByFirst() {
+        firstNameMap.forEach((key, value) ->
+                System.out.println("First name: " + key + " --- " + value));
+    }
+    public void printAllPeopleByLast(){
+        lastNameMap.forEach((key, value) ->
+                System.out.println("Last name: " + key + " --- " + value));
     }
     public void getNumber(String firstName){
         for (Person person : peopleList) {
@@ -59,23 +83,4 @@ public class PhoneDirectory {
     public void sortByLastName(){
         peopleList.sort(Comparator.comparing(Person::getLastName).reversed());
     }
-
-    public void printPeopleByFirstName(){
-        sortByFirstName();
-        for(Person p : peopleList){
-            System.out.println(p);
-        }
-    }
-    public void printPeopleByLastName(){
-        sortByLastName();
-        for(Person p : peopleList){
-            System.out.println(p);
-        }
-    }
-    public void printPeopleHashMap(){
-        peopleHashMap.entrySet().forEach(entry ->
-                System.out.println(entry.getKey() + " -- " + entry.getValue()));
-    }
-
-
 }

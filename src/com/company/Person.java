@@ -1,11 +1,11 @@
 package com.company;
 
 public class Person {
-    private String firstName;
-    private String lastName;
-    private Long phoneNumber;
+    private final String firstName;
+    private final String lastName;
+    private final String phoneNumber;
 
-    public Person(String firstName, String lastName, Long phoneNumber){
+    public Person(String firstName, String lastName, String phoneNumber){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -17,11 +17,8 @@ public class Person {
     public String getLastName(){
         return lastName;
     }
-    public long getPhoneNumber(){
+    public String getPhoneNumber(){
         return phoneNumber;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     @Override
