@@ -4,25 +4,22 @@ import resources.ResourceLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.*;
 
 public class PhoneDirectory {
-    private ArrayList<Person> peopleList;
     private Map<String, Set<Person>> firstNameMap;
     private Map<String, Set<Person>> lastNameMap;
     private Map<String, Set<Person>> phoneNumberMap;
-    private ResourceLoader rl;
+    private static final Path DEFAULT_PHONE_BOOK_PATH = Path.of(System.getProperty("user.dir"),"Phone Numbers List");
 
     public PhoneDirectory(){
-        peopleList = new ArrayList<>();
         firstNameMap = new HashMap<>();
         lastNameMap = new HashMap<>();
         phoneNumberMap = new HashMap<>();
-        rl = new ResourceLoader();
     }
     public void readPhoneBookFile() throws FileNotFoundException {
-        String folder = ResourceLoader.getResourceFolder();
-        File file = new File(folder +"//phonenumbers");
+        File file = new File(DEFAULT_PHONE_BOOK_PATH +"//phonenumbers");
         Scanner sc = new Scanner(file);
         while(sc.hasNextLine()){
             String parts [] = sc.nextLine().split(" ");
@@ -38,13 +35,13 @@ public class PhoneDirectory {
         }
     }
     public void addPerson(Person person){
-        Set<Person> set
-                = firstNameMap.computeIfAbsent(person.getFirstName().toUpperCase(), k -> new HashSet<>());
-        set.add(person);
-        set = lastNameMap.computeIfAbsent(person.getLastName().toUpperCase(), k -> new HashSet<>());
-        set.add(person);
-        set = phoneNumberMap.computeIfAbsent(person.getPhoneNumber(), k -> new HashSet<>());
-        set.add(person);
+        firstNameMap.computeIfAbsent(person.firstName().toUpperCase(Locale.ROOT), k -> new HashSet<>())
+                .add(person);
+        lastNameMap.computeIfAbsent(person.lastName().toUpperCase(Locale.ROOT), k -> new HashSet<>())
+                .add(person);
+        phoneNumberMap.computeIfAbsent(person.phoneNumber(), k -> new HashSet<>())
+                .add(person);
+
     }
     public Set<Person> getByFirstName(String firstname){
         return firstNameMap.get(firstname.toUpperCase());
@@ -63,24 +60,5 @@ public class PhoneDirectory {
     public void printAllPeopleByLast(){
         lastNameMap.forEach((key, value) ->
                 System.out.println("Last name: " + key + " --- " + value));
-    }
-    public void getNumber(String firstName){
-        for (Person person : peopleList) {
-            if (person.getFirstName().toLowerCase().equals(firstName.toLowerCase(Locale.ROOT))) {
-                person.getPhoneNumber();
-                break;
-            }
-        }
-    }
-    public void printPeople(){
-        for(Person person : peopleList){
-            System.out.println(person);
-        }
-    }
-    public void sortByFirstName(){
-        peopleList.sort(Comparator.comparing(Person::getFirstName));
-    }
-    public void sortByLastName(){
-        peopleList.sort(Comparator.comparing(Person::getLastName).reversed());
     }
 }
