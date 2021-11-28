@@ -1,7 +1,5 @@
 package com.company;
 
-import resources.ResourceLoader;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -14,9 +12,9 @@ public class PhoneDirectory {
     private static final Path DEFAULT_PHONE_BOOK_PATH = Path.of(System.getProperty("user.dir"),"Phone Numbers List");
 
     public PhoneDirectory(){
-        firstNameMap = new HashMap<>();
-        lastNameMap = new HashMap<>();
-        phoneNumberMap = new HashMap<>();
+        firstNameMap = new TreeMap<>();
+        lastNameMap = new TreeMap<>();
+        phoneNumberMap = new TreeMap<>();
     }
     public void readPhoneBookFile() throws FileNotFoundException {
         File file = new File(DEFAULT_PHONE_BOOK_PATH +"//phonenumbers");
@@ -43,22 +41,56 @@ public class PhoneDirectory {
                 .add(person);
 
     }
-    public Set<Person> getByFirstName(String firstname){
-        return firstNameMap.get(firstname.toUpperCase());
+    public void getByFirstName(String name) {
+        Map<String, Set<Person>> result = new TreeMap<>();
+        for (String s : firstNameMap.keySet()) {
+            if (s.startsWith(name.toUpperCase(Locale.ROOT))) {
+                result.put(s, firstNameMap.get(s));
+            }
+        }
+        result.forEach((key, value) -> {
+            System.out.println("First name: " + key + " --- " + value);
+        });
+        result.clear();
     }
-    public Set<Person> getByLastName(String lastname){
-        return lastNameMap.get(lastname.toUpperCase());
+    public void getByLastName(String lastname){
+        Map<String,Set<Person>> result = new TreeMap<>();
+        for(String s : lastNameMap.keySet()){
+            if(s.startsWith(lastname.toUpperCase(Locale.ROOT))){
+                result.put(s,lastNameMap.get(s));
+            }
+        }
+        result.forEach((key,value) ->{
+            System.out.println("Last name: " + key + " --- " + value);
+        });
+        result.clear();
     }
-    public Set<Person> getByPhoneNumber(String number){
-        return phoneNumberMap.get(number);
+    public void getByPhoneNumber(String number){
+        Map<String,Set<Person>> result = new TreeMap<>();
+        for(String s : phoneNumberMap.keySet()){
+            if(s.startsWith(number)){
+                result.put(s,phoneNumberMap.get(s));
+            }
+        }
+        result.forEach((key,value) ->{
+            System.out.println("Number: " + key + " --- " + value);
+        });
+        result.clear();
     }
 
-    public void printAllPeopleByFirst() {
-        firstNameMap.forEach((key, value) ->
-                System.out.println("First name: " + key + " --- " + value));
+    public void printAllByFirst() {
+        firstNameMap.forEach((key,value) ->{
+            System.out.println("First name: " + key + " --- " + value);
+        });
     }
-    public void printAllPeopleByLast(){
-        lastNameMap.forEach((key, value) ->
-                System.out.println("Last name: " + key + " --- " + value));
+    public void printAllByLast(){
+        lastNameMap.forEach((k,v) ->{
+            System.out.println("First name: " + k + " --- " + v);
+        });
+    }
+    public void printAllByPhoneNumber(){
+        phoneNumberMap.forEach((k, v) ->{
+            System.out.println("Number: " + k + " --- " + v);
+        });
     }
 }

@@ -1,11 +1,7 @@
 package com.company;
 
-import resources.ResourceLoader;
-
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -28,6 +24,7 @@ public class UserInterface {
         String input = scanner.nextLine();
         switch (input) {
             case "1" -> phoneDirectoryDatabase();
+            case "0" -> System.exit(0);
         }
     }
     public void phoneDirectoryDatabase() throws FileNotFoundException {
@@ -37,16 +34,43 @@ public class UserInterface {
             printPhoneDatabaseOptions();
             String input = scanner.nextLine();
             switch(input){
-                case "5": break;
+                case "5": start();
                 case "1":
-                    System.out.println("Enter first name [Case insensitive]");
-                    System.out.println(pd.getByFirstName(scanner.nextLine()));
+                    System.out.println("----------------------");
+                    System.out.println("Enter full first name [Case insensitive]");
+                    String name = scanner.nextLine();
+                    System.out.println("Showing all " + name.toUpperCase(Locale.ROOT));
+                    pd.getByFirstName(name);
+                    continue;
+                case "2":
+                    System.out.println("----------------------");
+                    System.out.println("Enter full last name [Case insensitive]");
+                    String lastName = scanner.nextLine();
+                    System.out.println("Showing all " + lastName.toUpperCase(Locale.ROOT));
+                    pd.getByLastName(lastName);
+                    continue;
+                case "3":
+                    System.out.println("----------------------");
+                    System.out.println("Enter phone number");
+                    String number = scanner.nextLine();
+                    System.out.println("Showing all " + number);
+                    pd.getByPhoneNumber(number);
+                    continue;
+                case "4":
+                    System.out.println("----------------------");
+                    System.out.println("1.By first name\n2.By last name\n3.By phone number");
+                    String choice = scanner.nextLine();
+                    switch(choice){
+                        case "1": pd.printAllByFirst();continue;
+                        case "2": pd.printAllByLast();continue;
+                        case "3": pd.printAllByPhoneNumber();continue;
+                }
 
             }
             break;
         }
-        System.out.println();
-        start();
+
+
     }
     public void printPhoneDatabaseOptions(){
         System.out.println("-------------------------------------------------");
